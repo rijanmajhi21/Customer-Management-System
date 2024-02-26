@@ -1,0 +1,495 @@
+<div class="tour-information">
+        <div class="div-2">
+          <div class="text-wrapper">Tour id:</div>
+          <div class="text-wrapper-2">Tour Title:</div>
+          <div class="text-wrapper-2">Operator:</div>
+          <div class="text-wrapper-2">Destination:</div>
+        </div>
+        <div class="text-wrapper-3">Tour Information</div>
+      </div>
+
+      <router-link to="/customer_info" @click="viewItem(customer)" title="View">
+                  <i class="bx bx-show"></i>
+                </router-link>
+
+<template>
+  <div class="customers">
+    <div class="title">
+      <div class="overlap-group">
+        <div class="customers-wrapper">Customers</div>
+      </div>
+    </div>
+    <div class="customer-overview">
+      <div class="create">
+        <router-link to="/customerform" class="create-wrapper">+Create</router-link>
+      </div>
+      <!-- Search Bar -->
+      <div class="search-bar">
+        <input v-model="searchQuery" type="text" placeholder="Search by customer ID">
+        <button @click="search">Search</button>
+      </div>
+      <table class="customer-table">
+        <thead>
+          <tr>
+            <th style="width: 20px">ID</th>
+            <th style="width: 120px">Customer Name</th>
+            <th style="width: 100px">Email</th>
+            <th style="width: 100px">Phone No.</th>
+            <th style="width: 120px">Address</th>
+            <th style="width: 40px">Booking</th>
+            <th style="width: 40px">Created at</th>
+            <th style="width: 30px">Edit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="customer in customers" :key="customer.id">
+            <td>{{ customer.cus_id }}</td>
+            <td>{{ customer.customer_name }}</td>
+            <td>{{ customer.email }}</td>
+            <td>{{ customer.phone_no }}</td>
+            <td>{{ customer.address }}</td>
+            <td>{{ customer.booking }}</td>
+            <td>{{ formatCreatedAt(customer.created_at) }}</td>
+            <td>
+              <span @click="viewItem(customer)" title="View">
+                <i class="bx bx-show"></i>
+              </span>
+              <span @click="showDeleteConfirmation(customer)" title="Delete">
+                <i class="bx bx-trash"></i>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+        <CustomerModal
+          :isModalVisible="isModalVisible"
+          :selectedCustomer="selectedCustomer"
+          @onClose="closeConfirmed"
+        />
+        <confirmation-dialog
+          v-if="showConfirmation"
+          :message="confirmationMessage"
+          @onConfirm="deleteConfirmed"
+          @onCancel="cancelDelete"
+        />
+      </table>
+    </div>
+  </div>
+</template>
+  
+<script>
+import ConfirmationDialog from '@/components/ConfirmationDialog.vue';
+import CustomerModal from '@/components/CustomerModal.vue';
+import axios from 'axios';
+import 'boxicons/css/boxicons.min.css';
+    
+  export default {
+    // eslint-disable-next-line vue/multi-word-component-names
+    name: 'CustomerPage',
+    components: {
+    ConfirmationDialog,
+    CustomerModal,
+    },
+    data() {
+      return {
+        showConfirmation: false,
+        customerToDelete: null,
+        confirmationMessage: '',
+        customers: [],
+        selectedCustomer: null,
+        isModalVisible: false,
+      };
+    },
+    mounted() {
+    this.fetchCustomers();
+    console.log('Customers:', this.customers);
+  },
+  methods: {
+    // Fetching customers
+    fetchCustomers() {
+      axios.get('http://localhost:8000/api/get-customers')
+        .then(response => {
+          this.customers = response.data.customers;
+        })
+        .catch(error => {
+          console.error('Error fetching customers:', error);
+        });
+    },
+    formatCreatedAt(timestamp) {
+      const date = new Date(timestamp);
+      return date.toISOString().slice(0, 19).replace("T", " ");
+    },
+    // Viewing Customer info
+    async viewItem(customer) {
+        try {
+          // Fetch customer data
+          const customerResponse = await axios.get(`http://localhost:8000/api/customers/${customer.cus_id}`);
+          const customerData = customerResponse.data;
+
+          // Fetch booking data
+          const bookingResponse =await axios.get(`http://localhost:8000/api/bookings/${customer.cus_id}`);
+          const bookingData = bookingResponse.data;
+
+          // Merge customer and booking data
+          const mergedData = { ...customerData, ...bookingData };
+
+          // Set selectedCustomer and show the modal
+          this.selectedCustomer = mergedData;
+          this.isModalVisible = true;
+        } catch (error) {
+          console.error('Error fetching customer details:', error);
+        }
+      },
+        closeConfirmed() {
+          // Close the modal
+          this.isModalVisible = false;
+        },
+    // Deleting Customer
+    showDeleteConfirmation(customer) {
+      this.customerToDelete = customer;
+      this.confirmationMessage = `Do you want to delete ${customer.customer_name}?`;
+      this.showConfirmation = true;
+    },
+    deleteConfirmed() {
+      axios.delete(`http://localhost:8000/api/customer/${this.customer.cus_id}`)
+      .then(response => {
+        console.log(response.data);
+        this.showConfirmation = false;
+      })
+      .catch(error => {
+        console.error('Error deleting customer:', error);
+        window.alert('Customer Deleted');
+      });
+      this.showConfirmation = false;
+    },
+    cancelDelete() {
+      this.showConfirmation = false;
+    },
+  },
+  };
+  </script>
+  
+  <style scoped>
+  .customers .title{
+    height: 60px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
+  .customers .overlap-group{
+    background-color: #f7f7f7;
+    border-bottom-style: solid;
+    border-color: #dbdbdb;
+    border-bottom-width:1px ;
+    height: 60px;
+    position: relative;
+  }
+
+  .customers .customers-wrapper{
+    color: #8e8e8e;
+    font-family: "Inter-Medium", Helvetica;
+    font-size: 24px;
+    font-weight: 500;
+    height: 29px;
+    left: 31px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 15px;
+  }
+
+  .create{
+    background-color: #3eb368;
+    border-radius: 4px;
+    height: 32px;
+    margin-left: 31px;
+    margin-top: 20px;
+    position: relative;
+    width: 100px;
+  }
+.create-wrapper{
+  color: #ffffff;
+  height: 21px;
+  left: 16px;
+  position: absolute;
+  text-align: center;
+  top: 5px;
+  width:67px;
+}
+.search-bar {
+  margin-bottom: 20px;
+  margin-top: 10px;
+  outline: none;
+  margin-left: 31px;
+  width: 266px;
+}
+
+.search-bar input {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 8px;
+  outline: none;
+}
+
+.search-bar button {
+  padding: 8px 12px;
+  font-size: 14px;
+  background-color: #3eb368;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search-bar button:hover {
+  background-color: #45a049;
+}
+  .customer-overview {
+    position: absolute;
+    top: 61px;
+    width: 100%;
+  }
+  
+  .customer-table {
+    width: 1220px;
+    margin-top: 20px;
+    margin-left: 31px;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f7f7f7;
+    color: #8e8e8e;
+  }
+
+  span {
+    cursor: pointer;
+  }
+  </style>
+  <?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Customer;
+use App\Models\Booking;
+
+class CustomerInfoController extends Controller
+{
+    public function getCustomer($cus_id)
+    {
+        $customer = Customer::where('cus_id', $cus_id)->firstOrFail();
+        return response()->json(['customer' => $customer]);
+    }
+
+    public function getBooking($cus_id)
+    {
+        $booking = Booking::where('cus_id', $cus_id)->first();
+        return response()->json(['booking' => $booking]);
+    }
+}
+// Storing and retriving Customer Info
+Route::get('/customers/{cus_id}', [CustomerInfoController::class, 'getCustomer']);
+Route::get('/bookings/{cus_id}', [CustomerInfoController::class, 'getBooking']);
+  
+  <template>
+    <div class="modal" v-if="isModalVisible">
+    <div class="customer-information">
+        <div class="div">
+            <div class="div-3">
+            <div class="text-wrapper-3">General Information</div>
+                <div class="div-2" v-for="selectedCustomer in selectedCustomer" :key="selectedCustomer.cus_id">
+                    <div class="text-wrapper-2">Customer Name: {{ selectedCustomer.customer_name }}</div>
+                    <div class="text-wrapper-2">Customer ID: {{ selectedCustomer.cus_id }}</div>
+                    <div class="text-wrapper-2">Email: {{ selectedCustomer.email }}</div>
+                    <div class="text-wrapper-2">Phone number: {{ selectedCustomer.phone_no }}</div>
+                    <div class="text-wrapper-2">Address: {{ selectedCustomer.address }}</div>
+                    <div class="text-wrapper-2">Booking: {{ selectedCustomer.booking }}</div>
+                    <div class="text-wrapper-2">Created at: {{ formatCreatedAt(selectedCustomer.created_at) }}</div>
+                </div>
+            </div>
+            <div class="booking-information" >
+            <div class="text-wrapper-3">Booking Information</div>
+                <div class="div-2" v-for="selectedCustomer in selectedCustomer" :key="selectedCustomer.tour_id" >
+                    <div class="text-wrapper-2">Tour id: {{ selectedCustomer.tour_id }}</div>
+                    <div class="text-wrapper-2">Duration: {{ selectedCustomer.duration }}</div>
+                    <div class="text-wrapper-2">Date: {{ formatCreatedAt(selectedCustomer.created_at) }}</div>
+                    <div class="text-wrapper-2">Amount: {{ selectedCustomer.amount }}</div>
+                    <div class="text-wrapper-2">Discount Amount: {{ selectedCustomer.discount_amount }}</div>
+                    <div class="text-wrapper-2">Total: {{ selectedCustomer.total }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="close">
+            <button class="close-wrapper" @click="close">Close</button>
+        </div>
+    </div>
+    </div>
+    </template>
+    
+    <script>
+    
+    export default {
+    data() {
+        return {
+
+        };
+    },
+
+    props: {
+    isModalVisible: Boolean,
+    selectedCustomer: Object,
+    onClose: Function,
+    },
+    methods:{
+    created(){
+        console.log(this.selectedCustomer);
+    },
+    formatCreatedAt(timestamp) {
+        const date = new Date(timestamp);
+        return date.toISOString().slice(0, 19).replace("T", " ");
+    },
+    close() {
+        this.$emit('onClose');
+    },
+    }
+};
+</script>
+
+<style>
+.modal{
+    justify-content: center;
+}
+.close{
+    margin-left: 62px;
+    margin-bottom: 31px;
+    bottom: 12px;
+    background-color: #ffffff;
+    border-radius: 4px;
+    height: 32px;
+    position: relative;
+    width: 100px;
+    border-width: 1px;
+    border-color: #3eb368;
+}
+.close-wrapper{
+    color: #3eb368;
+    height: 21px;
+    left: 16px;
+    position: absolute;
+    text-align: center;
+    top: 5px;
+    width:67px;
+}
+
+.customer-information {
+    background-color: #ffffff;
+    flex-direction: row;
+    justify-content: center;
+    position: absolute;
+    top: 71px;
+    box-shadow: 0px 4px 4px #00000040;
+    border: 1px solid #3eb368;
+    margin-left: 350px;
+}
+
+.customer-information .div {
+    background-color: #ffffff;
+    height: 550px;
+    position: relative;
+    width: 500px;
+    margin-top: 20px;
+    margin-left: 31px;
+}
+
+.customer-information .tour-information {
+    height: 133px;
+    left: 20px;
+    position: absolute;
+    top: 477px;
+    width: 413px;
+}
+
+.customer-information .div-2 {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    left: 0;
+    position: absolute;
+    top: 49px;
+    width: 411px;
+}
+
+.customer-information .text-wrapper {
+    color: #686868;
+    font-family: "Inter-Medium", Helvetica;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: normal;
+    margin-top: -1px;
+    position: relative;
+    width: fit-content;
+}
+
+.customer-information .text-wrapper-2 {
+    color: #686868;
+    font-family: "Inter-Medium", Helvetica;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: normal;
+    position: relative;
+    width: fit-content;
+}
+
+.customer-information .text-wrapper-3 {
+    color: #686868;
+    font-family: "Inter-Medium", Helvetica;
+    font-size: 20px;
+    font-weight: 500;
+    height: 29px;
+    left: 0;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 0;
+}
+
+.customer-information .booking-information {
+    height: 179px;
+    left: 20px;
+    position: absolute;
+    top: 266px;
+    width: 413px;
+}
+
+.customer-information .div-3 {
+    height: 202px;
+    left: 20px;
+    position: absolute;
+    top: 32px;
+    width: 413px;
+}
+
+.customer-information .text-wrapper-4 {
+    color: #686868;
+    font-family: "Inter-Medium", Helvetica;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: normal;
+    position: relative;
+    width: 206px;
+}
+</style>
