@@ -1,4 +1,8 @@
 import AdminLayout from '@/layouts/AdminLayout.vue';
+import AboutusPage from '@/views/AboutUs.vue';
+import ContactUsPage from '@/views/ContactUs.vue';
+import HomePage from '@/views/HomePage.vue';
+import LandingPage from '@/views/LandingPage.vue';
 import AddTours from '@/views/AddTours.vue';
 import BookingForm from '@/views/BookingForm.vue';
 import Bookings from '@/views/Bookings.vue';
@@ -8,7 +12,6 @@ import CustomerInformation from '@/views/CustomerInformation.vue';
 import CustomerPage from '@/views/CustomersPage.vue';
 import DashboardPage from '@/views/DashboardPage.vue';
 import ForgotPassword from '@/views/ForgotPassword.vue';
-import HomePage from '@/views/HomePage.vue';
 import LoginForm from '@/views/LoginForm.vue';
 import SignUp from '@/views/SignUp.vue';
 import ToursPage from '@/views/ToursPage.vue';
@@ -18,11 +21,23 @@ import { createRouter, createWebHistory } from 'vue-router';
 const routes = [{
         path: '/',
         redirect: '/homepage', // Redirect the root path to /homepage
+
     },
+
+    {
+        path: '/homepage',
+        component: HomePage,
+        children: [
+            { path: '', redirect: 'LandingPage' },
+            { path: '/landingpage', component: LandingPage, },
+            { path: '/aboutus', component: AboutusPage, },
+            { path: '/contactus', component: ContactUsPage, },
+        ]
+    },
+
     { path: '/signup', component: SignUp, },
     { path: '/login', component: LoginForm, },
     { path: '/forgotpassword', component: ForgotPassword, },
-    { path: '/homepage', component: HomePage, },
 
     {
         path: '/admin',

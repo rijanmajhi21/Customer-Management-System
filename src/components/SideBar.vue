@@ -26,6 +26,12 @@
                 <router-link to="/tours" class="text-wrapper" @click="activateSidebarItem('tours')">Tours</router-link>
               </div>
             </router-link>
+            <!-- <router-link to="/" :class="{ 'div-wrapper': true, 'active': activeItem === '' }">
+              <div class="bookings">
+                <i class='bx bxs-message'></i>
+                <router-link to="/" class="text-wrapper" @click="activateSidebarItem('')">Messages</router-link>
+              </div>
+            </router-link> -->
           </div>
       </div>
     </div>

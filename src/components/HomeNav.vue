@@ -4,17 +4,15 @@
             <img class="logo" alt="Bookmundi Logo" src="@/assets/bmlogo.webp" />
             <ul class="nav-links">
             <li><a href="/homepage">Home</a></li>
-            <li><a href="#">Tours</a></li>
-            <li><a href="#">Destinations</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Contact Us</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/aboutus">About Us</a></li>
+            <li><a href="/contactus">Contact Us</a></li>
             </ul>
             <div class="user" @click="toggleDropdown">
                 <i class='bx bx-menu'></i>
                 <div v-if="showDropdown" class="login_dropdown">
                 <!-- Add your dropdown menu items here -->
                 <router-link to="/login" @click="login">Login</router-link>
-                <router-link to="/signup" @click="signup">Signup</router-link>
             </div>
             </div>
         </div>
@@ -56,10 +54,12 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
+
     margin: 0 auto;
     padding: 0 1rem;
     width: 100%;
+    padding-left: 11%;
+    padding-right: 11%;
 }
     
 .logo {

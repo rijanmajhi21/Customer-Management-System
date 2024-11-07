@@ -2,61 +2,69 @@
   <div class="loginpage">
     <!-- Include the HomeNav component -->
     <HomeNav />
+    <router-view></router-view>
   </div>
-      <div class="login__frame">
-        <div class="login__frame-2">
-          <div class="login__welcomeback">
-            <div class="login__text-wrapper">Welcome back! <br>
-              <p class="login__p">Enter your email and password to login our dashboard.</p>
-            </div>
-          </div>
-          <form @submit.prevent="login" class="form" method="post">
-          <div class="login__frame-3">
-            <div class="login__text-wrapper-2">Email</div>
-            <div class="login__textbox">
-              <input
-                    class="login__overlap-group"
-                    type="text"
-                    id="text"
-                    v-model="email"
-                    placeholder="Enter your email"
-                  />
-            </div>
-          </div>
-          <div class="login__frame-4">
-            <div class="login__text-wrapper-2">Password</div>
-            <div class="login__textbox">
-                  <input
-                    class="login__overlap-group"
-                    type="password"
-                    id="password"
-                    v-model="password"
-                    placeholder="Enter your password"
-                  />
-            </div>
-          </div>
-          <p class="login__don-t-have-account">
-            <span class="login__span"></span>
-            <router-link to="/forgotpassword" class="login__text-wrapper-5">Forgot password?</router-link>
+  <div class="login__frame">
+    <div class="login__frame-2">
+      <div class="login__welcomeback">
+        <div class="login__text-wrapper">
+          Welcome back! <br />
+          <p class="login__p">
+            Enter your email and password to login our dashboard.
           </p>
-          <button class="login_button" type="submit">
-            <div class="login__text-wrapper-4">Log in</div>
-          </button>
-          <p class="login__don-t-have-account">
-            <span class="login__span"> Don't have an account?</span>
-            <router-link to="/signup" class="login__text-wrapper-5"> Signup?</router-link>
-          </p>
-        </form>
         </div>
-        <img class="login__bookmundi" alt="Bookmundi" src="@/assets/bmlogo.webp" />
       </div>
+      <form @submit.prevent="login" class="form" method="post">
+        <div class="login__frame-3">
+          <div class="login__text-wrapper-2">Email</div>
+          <div class="login__textbox">
+            <input
+              class="login__overlap-group"
+              type="text"
+              id="text"
+              v-model="email"
+              placeholder="Enter your email"
+            />
+          </div>
+        </div>
+        <div class="login__frame-4">
+          <div class="login__text-wrapper-2">Password</div>
+          <div class="login__textbox">
+            <input
+              class="login__overlap-group"
+              type="password"
+              id="password"
+              v-model="password"
+              placeholder="Enter your password"
+            />
+          </div>
+        </div>
+        <p class="login__don-t-have-account">
+          <span class="login__span"></span>
+          <router-link to="/forgotpassword" class="login__text-wrapper-5"
+            >Forgot password?</router-link
+          >
+        </p>
+        <button class="login_button" type="submit">
+          <div class="login__text-wrapper-4">Log in</div>
+        </button>
+        <p class="login__don-t-have-account">
+          <span class="login__span"> Don't have an account?</span>
+          <router-link to="/signup" class="login__text-wrapper-5">
+            Signup?</router-link
+          >
+        </p>
+      </form>
+    </div>
+    <img class="login__bookmundi" alt="Bookmundi" src="@/assets/bmlogo.webp" />
+  </div>
 </template>
 
 <script>
-import HomeNav from '@/components/HomeNav.vue';
-import router from '@/router';
-import axios from 'axios';
-import 'boxicons/css/boxicons.min.css';
+import HomeNav from "@/components/HomeNav.vue";
+import router from "@/router";
+import axios from "axios";
+import "boxicons/css/boxicons.min.css";
 
 export default {
   name: "LoginForm",
@@ -65,35 +73,35 @@ export default {
   },
   data() {
     return {
-      email: '',
-      password: '',
-      message: '',
+      email: "",
+      password: "",
+      message: "",
     };
   },
   methods: {
     login() {
-      axios.post('http://localhost:8000/api/login', {
-        email: this.email,
-        password: this.password,
-      })
-      .then(response => {
-        console.log(response.data);
-        if (response.data.message === 'Login successful') {
-          router.push('/dashboard');
-        }
-      })
-      .catch(error => {
-        console.error('Error logging in:', error);
-        window.alert('Error! Check your information!');
-        // Handle the error, display a message, etc.
-      });
+      axios
+        .post("http://localhost:8000/api/login", {
+          email: this.email,
+          password: this.password,
+        })
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.message === "Login successful") {
+            router.push("/dashboard");
+          }
+        })
+        .catch((error) => {
+          console.error("Error logging in:", error);
+          window.alert("Error! Check your information!");
+        });
     },
   },
 };
 </script>
 
 <style>
-.loginpage{
+.loginpage {
   position: relative;
 }
 
@@ -116,7 +124,7 @@ export default {
   }
 }
 
-.form{
+.form {
   align-items: flex-start;
   display: inline-flex;
   flex-direction: column;
@@ -211,7 +219,7 @@ export default {
   outline: none;
 }
 
-.login__overlap-group::placeholder{
+.login__overlap-group::placeholder {
   color: #d2d2d2;
   font-family: "Inter-Regular", Helvetica;
   font-size: 16px;
@@ -263,8 +271,8 @@ export default {
   align-items: center;
   gap: 10px;
   border-radius: 4px;
-  background: #3EB368;
-  box-shadow: 0px 4px 4px 0px rgba(62, 179, 104, 0.40);
+  background: #3eb368;
+  box-shadow: 0px 4px 4px 0px rgba(62, 179, 104, 0.4);
   border: none;
 }
 
@@ -309,5 +317,4 @@ export default {
   top: 80px;
   width: 178px;
 }
-
 </style>

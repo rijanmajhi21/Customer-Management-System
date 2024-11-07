@@ -31,8 +31,44 @@
                         <div class="info">{{ formatCreatedAt(customer.created_at) }}</div>
                     </div>
                 </div>
-                <div class="sub-title">Booking and Tour Information</div>
-                <div class="booking-tour">
+                <div class="sub-title">Customer Bookings Details</div>
+                <div class="booking-tour" v-if="bookings.length==0">
+                    <div class="bookingg-table">
+                        <div class="column-headers">
+                            <div class="header">Tour ID</div>
+                            <div class="header">Duration</div>
+                            <div class="header">Booking Date</div>
+                            <div class="header">Price</div>
+                            <div class="header">Discount Percentage</div>
+                            <div class="header">Total Price</div>
+                        </div>
+                        <div class="boooking-info">
+                            <div class="info">Null</div>
+                            <div class="info">Null</div>
+                            <div class="info">Null</div>
+                            <div class="info">Null</div>
+                            <div class="info">Null</div>
+                            <div class="info">Null</div>
+                        </div>
+                    </div>
+                    <div class="tourr-table">
+                        <div class="toour-headers" >
+                            <div class="tour-header">Tour ID</div>
+                            <div class="tour-header">Tour Title</div>
+                            <div class="tour-header">Operator</div>
+                            <div class="tour-header">Tour Type</div>
+                            <div class="tour-header">Price</div>
+                        </div>
+                        <div class="toour-info">
+                            <div class="info">Null</div>
+                            <div class="info">Null</div>
+                            <div class="info">Null</div>
+                            <div class="info">Null</div>
+                            <div class="info">Null</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="booking-tour" v-if="bookings.length>0">
                 <div class="bookingg-table">
                     <div class="column-headers">
                         <div class="header">Tour ID</div>
@@ -162,51 +198,45 @@
         },
         computed: {
         firstBooking() {
-            // Check if bookings array is not empty
             if (this.bookings.length > 0) {
                 return this.bookings[0]; // Return the first booking
             } else {
-                return {}; // Return an empty object if no bookings
+                return {};
             }
         },
         secondBooking() {
-            // Check if bookings array is not empty
             if (this.bookings.length > 1) {
                 return this.bookings[1]; // Return the first booking
             } else {
-                return {}; // Return an empty object if no bookings
+                return {};
             }
         },
         thirdBooking() {
-            // Check if bookings array is not empty
             if (this.bookings.length > 2) {
                 return this.bookings[2]; // Return the first booking
             } else {
-                return {}; // Return an empty object if no bookings
+                return {};
             }
         },
         firstTour() {
-            // Check if bookings array is not empty
             if (this.tours.length > 0) {
                 return this.tours[0]; // Return the first booking
             } else {
-                return {}; // Return an empty object if no bookings
+                return {};
             }
         },
         secondTour() {
-            // Check if bookings array is not empty
             if (this.tours.length > 1) {
                 return this.tours[1]; // Return the first booking
             } else {
-                return {}; // Return an empty object if no bookings
+                return {};
             }
         },
         thirdTour() {
-            // Check if bookings array is not empty
             if (this.tours.length > 2) {
                 return this.tours[2]; // Return the first booking
             } else {
-                return {}; // Return an empty object if no bookings
+                return {};
             }
         }
         },
@@ -365,7 +395,7 @@
     display: flex;
     flex-direction: column; /* Align headers vertically */
     text-align: left;
-    color: #7a7a7a;
+    color: #525252;
 }
 
 .header {
@@ -379,7 +409,7 @@
     box-sizing: border-box;
     width: 300px;
     text-align: left;
-    color: #8e8e8e;
+    color: #777777;
 }
 .booking-tour{
     display: flex;
@@ -396,7 +426,7 @@
     box-sizing: border-box;
     width: 300px;
     text-align: left;
-    color: #8e8e8e;
+    color: #777777;
 }
 
 .toour-info {
@@ -405,7 +435,7 @@
     box-sizing: border-box;
     width: 400px;
     text-align: left;
-    color: #8e8e8e;
+    color: #777777;
 }
 
 .info {
@@ -415,7 +445,7 @@
 .tour-header{
     font-weight: bold;
     padding: 10px;
-    color: #8e8e8e;
+    color: #525252;
 }
 
 .toour-headers {
@@ -424,6 +454,6 @@
     display: flex;
     flex-direction: column; /* Align headers vertically */
     text-align: left;
-    color: #7a7a7a;
+    color: #525252;
 }
 </style>

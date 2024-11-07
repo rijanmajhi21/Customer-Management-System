@@ -2,6 +2,7 @@
   <div class="signupage">
     <!-- Include the HomeNav component -->
     <HomeNav />
+    <router-view></router-view>
   </div>
       <div class="signup__frame">
         <div class="signup__frame-2">

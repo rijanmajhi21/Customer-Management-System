@@ -7,6 +7,7 @@
         <p>Kathmandu, Nepal</p>
         <p>Email: bookmundinepal@gmail.com</p>
         <p>Phone: +9848006643</p>
+        <p>© Bookmundi.com 2024. All Rights Reserved.</p>
         </div>
         <div class="footer-section2">
         <h3>Follow Us on</h3>
@@ -14,6 +15,7 @@
             <a href="https://www.facebook.com/bookmundi/" target="_blank"><i class='bx bxl-facebook-square'></i></a>
             <a href="https://www.instagram.com/bookmundi/" target="_blank"><i class='bx bxl-instagram'></i></a>
             <a href="https://twitter.com/bookmundi" target="_blank"><i class='bx bxl-twitter'></i></a>
+            <a href="https://twitter.com/bookmundi" target="_blank"><i class='bx bxl-pinterest'></i></a>
         </div>
         </div>
     </div>
@@ -29,7 +31,7 @@ export default{
 .footer {
     background-color: #333;
     color: #fff;
-    padding: 40px 0;
+    padding: 40px;
 }
     
 .footer-content {
